@@ -14,6 +14,7 @@ import com.jmr.testGame.screens.SmiulationTest;
 import com.jmr.testGame.screens.TitleScreen;
 import com.jmr.testGame.screens.omgCubes;
 import com.jmr.testGame.screens.orthoCamTest;
+import com.jmr.testGame.screens.triforce;
 
 public class testGameExample implements ApplicationListener {
 	//counts how many times the render loop is ran
@@ -27,7 +28,8 @@ public class testGameExample implements ApplicationListener {
 		//RemoteInput receiver = new RemoteInput(8190); //remove when testing on phone
 		//Gdx.input = receiver;						  //remove when testing on phone
 		if (!isRunning) {
-			myScreen = new omgCubes(Gdx.app);
+			//for testing a new screen, change this to a new screen, otherwise make it the title screen
+			myScreen = new triforce(Gdx.app);
 			isRunning = true;
 		}
 	}

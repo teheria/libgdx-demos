@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
 public class omgCubes implements Screen {
-	//f isRunning is true, this Screen will exit
+	//if isRunning is true, this Screen will exit
 	private boolean isRunning = false;
 	//Generic Camera, is set to PerspectiveCamera in resize()
 	private Camera myCam;
@@ -34,7 +34,6 @@ public class omgCubes implements Screen {
 	private Mesh pyramid;
 	//an openGL mesh
 	private Mesh cube;
-	private float[] cubeColors;
 	//used to rotate the pyramid
 	private float rotatePyramid;
 	//used to rotate the cube
@@ -74,14 +73,14 @@ public class omgCubes implements Screen {
 			
 			//set x, y, z, vertices and set Colors red, green, blue, alpha
 			cube.setVertices(new float[] {
-					-1.0f,  1.0f,  1.0f, Color.toFloatBits(0, 255, 0, 255),		//V0
-					 1.0f,  1.0f,  1.0f, Color.toFloatBits(0, 255, 0, 255),		//V1
-					 1.0f, -1.0f,  1.0f, Color.toFloatBits(255, 125, 0, 255),	//V2
-					-1.0f, -1.0f,  1.0f, Color.toFloatBits(255, 125, 0, 255),	//V3
-					-1.0f,  1.0f, -1.0f, Color.toFloatBits(0, 255, 0, 255),		//V4
-					 1.0f,  1.0f, -1.0f, Color.toFloatBits(0, 255, 0, 255),		//V5
-					 1.0f, -1.0f, -1.0f, Color.toFloatBits(0, 255, 255, 255),	//V6
-					-1.0f, -1.0f, -1.0f, Color.toFloatBits(0, 125, 0, 255)	//V7
+					-1.0f,  1.0f,  1.0f, Color.toFloatBits(255, 0, 0, 255),		//V0
+					 1.0f,  1.0f,  1.0f, Color.toFloatBits(255, 0, 0, 255),		//V1
+					 1.0f, -1.0f,  1.0f, Color.toFloatBits(255, 0, 0, 255),	//V2
+					-1.0f, -1.0f,  1.0f, Color.toFloatBits(255, 0, 0, 255),	//V3
+					-1.0f,  1.0f, -1.0f, Color.toFloatBits(255, 255, 255, 255),		//V4
+					 1.0f,  1.0f, -1.0f, Color.toFloatBits(255, 255, 255, 255),		//V5
+					 1.0f, -1.0f, -1.0f, Color.toFloatBits(255, 255, 255, 255),	//V6
+					-1.0f, -1.0f, -1.0f, Color.toFloatBits(255, 255, 255, 255)		//V7
 			});
 			
 			//links the indices to draw
@@ -149,11 +148,13 @@ public class omgCubes implements Screen {
 
 	@Override
 	public boolean isDone() {
+		//
 		return isRunning;
 	}
 
 	@Override
 	public void dispose() {
+		//always need to disposed meshes
 		pyramid.dispose();
 		cube.dispose();
 	}
