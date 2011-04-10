@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class JumpTest implements Screen{
-	OrthographicCamera myCam;
+	PerspectiveCamera myCam;
 	
 	private boolean isRunning = false;
 	
@@ -32,9 +33,11 @@ public class JumpTest implements Screen{
 	private float PLAYFIELD_MIN_X;
 	private float PLAYFIELD_MAX_X;
 	
+	private long startTime;
+	
 	/* CONSTRUCTOR */
 	public JumpTest(Application app) {
-		myCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		myCam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		myCam.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		
 		sp = new SpriteBatch();
@@ -50,6 +53,8 @@ public class JumpTest implements Screen{
 		
 		PLAYFIELD_MIN_X = sprite.getWidth() / 2;
 		PLAYFIELD_MAX_X = Gdx.graphics.getWidth() - sprite.getWidth() / 2;
+		
+		startTime = System.nanoTime();
 	}
 
 	@Override
@@ -58,33 +63,26 @@ public class JumpTest implements Screen{
 			isRunning = true;
 		}
 		
+		long curTime = System.nanoTime();
+		
+		float frameTime = (curTime - startTime) * 0.0000000008f;
+		startTime = curTime;	
+		//Gdx.app.log("frameTime: ", "" + frameTime);
+		
 		/* if not in a jumping state and if the screen was touched, lets jump! */
 		if (!isJumping && Gdx.input.justTouched()) {
 			isJumping = true;
-			velocityY = Gdx.graphics.getHeight() - 400;
-		}
+			velocityY = Gdx.graphics.getHeight();
+			Gdx.app.log("Initial Velocity: ", "" + velocityY);
+			Gdx.app.log("frameTime: ", "" + frameTime);
+		}		
 		
-		
-		if(isJumping) {
-			if (position.y + 0.001f > ground) {
-				position.y += (float) (velocityY * Gdx.graphics.getDeltaTime() - (0.5f * gravity *
-						(Math.pow(Gdx.graphics.getDeltaTime(), 2.0f))));
+		/*if(isJumping) {
+			if (position.y + 0.0001f > ground) {
+				position.y += (float) (velocityY * frameTime - (0.5f * gravity *
+						(Math.pow(frameTime, 2.0f))));
 				velocityY -= gravity;
-				Gdx.app.log("Y: ", "" + position.y + " GROUND: " + ground + " VELOCITY: " + velocityY);
-			}
-			else {
-				isJumping = false;
-				position.y = ground;
-				Gdx.app.log("Velocity: ", "" + velocityY + " isJumping: " + isJumping + " Y: " + position.y);
-			}
-		}
-		
-		/* give the object a upward velocity, then accelerate downward, bringing it back to the ground */
-		/*if (isJumping) {
-			if (position.y + velocityY > ground) {
-				position.y += velocityY * (Gdx.graphics.getDeltaTime());
-				velocityY -= gravity;
-				Gdx.app.log("Y: ", "" + position.y + " GROUND: " + ground + " VELOCITY: " + velocityY);
+				//Gdx.app.log("Y: ", "" + position.y + " GROUND: " + ground + " VELOCITY: " + velocityY);
 			}
 			else {
 				isJumping = false;
@@ -92,6 +90,20 @@ public class JumpTest implements Screen{
 				Gdx.app.log("Velocity: ", "" + velocityY + " isJumping: " + isJumping + " Y: " + position.y);
 			}
 		}*/
+		
+		/* give the object a upward velocity, then accelerate downward, bringing it back to the ground */
+		if (isJumping) {
+			if (position.y + 0.0001f > ground) {
+				position.y += velocityY * (frameTime);
+				velocityY -= gravity;
+				//Gdx.app.log("Y: ", "" + position.y + " GROUND: " + ground + " VELOCITY: " + velocityY);
+			}
+			else {
+				isJumping = false;
+				position.y = ground;
+				Gdx.app.log("Velocity: ", "" + velocityY + " isJumping: " + isJumping + " Y: " + position.y);
+			}
+		}
 		
 		/* LEFT & RIGHT ACCELEROMETER MOVEMENT */
 		if (Gdx.input.getAccelerometerY() < 0) {
@@ -109,12 +121,12 @@ public class JumpTest implements Screen{
 	}
 
 	@Override
-	public void render(Application app) {		
+	public void render(Application app) {
+		myCam.update();
+		myCam.apply(Gdx.gl10);
 		app.getGraphics().getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);		
 		sp.begin();
 		sp.disableBlending();
-		myCam.update();
-		myCam.apply(Gdx.gl10);
 		sp.setColor(Color.WHITE);
 		sp.draw(bg, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), 0, 0, 1024, 512, false, false);
 		sp.enableBlending();

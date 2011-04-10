@@ -29,7 +29,7 @@ public class testGameExample implements ApplicationListener {
 		//Gdx.input = receiver;						  //remove when testing on phone
 		if (!isRunning) {
 			//for testing a new screen, change this to a new screen, otherwise make it the title screen
-			myScreen = new triforce(Gdx.app);
+			myScreen = new TitleScreen(Gdx.app);
 			isRunning = true;
 		}
 	}

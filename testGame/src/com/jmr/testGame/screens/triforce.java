@@ -13,6 +13,7 @@ package com.jmr.testGame.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -82,7 +83,9 @@ public class triforce implements Screen {
 	@Override
 	public void update(Application app) {
 		//update rotation variable each update
-		rotateTri+=Gdx.graphics.getDeltaTime()*100;
+		//if (Gdx.input.isKeyPressed(Keys.KEYCODE_DPAD_UP)) {
+			rotateTri+=Gdx.graphics.getDeltaTime()*100;
+		//}
 	}
 
 	@Override
